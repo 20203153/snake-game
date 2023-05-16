@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "mac lldb starting",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${fileDirname}/output/${fileBasenameNoExtension}",
+            "args": [],
+            "terminal": "integrated",
+            "preLaunchTask": "mac-arm64 g++ build",
+            "stdio": [null,null,null]
+        }
+    ],
+    "version": "2.0.0"
+}

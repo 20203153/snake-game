@@ -1,0 +1,17 @@
+{
+  "[json]": {
+    "editor.tabSize": 2
+  },
+  "[c]": {
+    "files.encoding": "utf8"
+  },
+  "[cpp]": {
+    "files.encoding": "utf8"
+  },
+  "markdown-pdf.headerTemplate": "<div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+  "files.eol": "\n",
+  "cmake.configureOnOpen": false,
+  "code-runner.runInTerminal": true,
+  "cmake.generator": "Unix Makefiles",
+  "cmake.buildDirectory": "${workspaceFolder}"
+}
