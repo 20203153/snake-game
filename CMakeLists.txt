@@ -13,7 +13,7 @@ add_executable(${PROJECT_NAME}
     main.cpp
 )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX ".out")
+set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX ".exe")
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
