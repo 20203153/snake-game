@@ -1,0 +1,3 @@
+namespace test {
+    void print();
+}
