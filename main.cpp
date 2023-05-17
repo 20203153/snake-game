@@ -1,10 +1,24 @@
 #include <iostream>
-#include "lib/test.h"
+#include <ncurses.h>
+#include "lib/Window.h"
 
 using namespace std;
+using namespace lib;
 
 int main() {
-    test::print();
+    initscr();
+    refresh();
+
+    Window mainWindow;
+
+    WINDOW* mainW = mainWindow.getWindow();
+
+    mvwprintw(mainW, 1, 1, "Hello World!");
+    wrefresh(mainW);
+
+    getch();
+    mainWindow.~Window();
+    endwin();
 
     return 0;
 }

@@ -13,5 +13,8 @@
   "cmake.configureOnOpen": false,
   "code-runner.runInTerminal": true,
   "cmake.generator": "Unix Makefiles",
-  "cmake.buildDirectory": "${workspaceFolder}"
+  "cmake.buildDirectory": "${workspaceFolder}",
+  "files.associations": {
+    "ios": "cpp"
+  }
 }
