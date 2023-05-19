@@ -44,3 +44,8 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 .cmake/api/
+
+# vscode
+c_cpp_properties.json
+launch.json
+tasks.json

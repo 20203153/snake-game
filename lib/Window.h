@@ -6,9 +6,15 @@ namespace lib {
         WINDOW *window;
     
     public:
-        Window(int height = 22, int width = 22);
+        Window(int height = 22, int width = 22, int startx = 0, int starty = 0);
         ~Window();
         
         WINDOW* getWindow();
+
+        template<typename ... Types>
+        void printw(int x, int y, const char* fnt, Types ... args);
+        void printw(int x, int y, const char* fmt);
+
+        void refresh();
     };
 }

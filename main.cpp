@@ -9,12 +9,13 @@ int main() {
     initscr();
     refresh();
 
-    Window mainWindow;
+    int startx = (COLS - 22) / 2;
+    int starty = (LINES - 22) / 2;
 
-    WINDOW* mainW = mainWindow.getWindow();
+    Window mainWindow(22, 22, startx, starty);
 
-    mvwprintw(mainW, 1, 1, "Hello World!");
-    wrefresh(mainW);
+    mainWindow.printw(1, 1, "Hello World!");
+    mainWindow.refresh();
 
     getch();
     mainWindow.~Window();
