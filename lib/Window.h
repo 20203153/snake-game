@@ -1,4 +1,8 @@
+#ifdef _WIN32
+#include <ncurses/ncurses.h>
+#else
 #include <ncurses.h>
+#endif
 
 namespace lib {
     class Window {

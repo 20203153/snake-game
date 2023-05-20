@@ -4,7 +4,7 @@ project(snake_game C CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(Curses REQUIRED)
-include_directories(${CURSES_INCLUDE_DIR})
+include_directories(${CURSES_INCLUDE_DIRS})
 
 include_directories(".")
 add_subdirectory(lib)
@@ -17,7 +17,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX ".exe")
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        ${CURSES_LIBRARY}
+        ${CURSES_LIBRARIES}
     PRIVATE
         lib
 )

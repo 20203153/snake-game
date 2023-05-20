@@ -1,5 +1,11 @@
 #include "Window.h"
+
+#ifdef _WIN32
+#include <ncurses/ncurses.h>
+#else
 #include <ncurses.h>
+#endif
+
 namespace lib {
     Window::Window(int height, int width, int startx, int starty) {
         window = newwin(height, width, starty, startx);
