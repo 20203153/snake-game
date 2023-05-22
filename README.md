@@ -18,7 +18,7 @@ cmake . && make
 ### 1.
 - [ ] NCurses Lib 함수 이용, 2차원 배열 Map을 Game 화면으로 표시하는 프로그램
 - [ ] Map 사이즈는 최소 21*21
-- [ ] Wall과 Immune Wall 구분.
+- [x] Wall과 Immune Wall 구분.
 - 비고: lib::ElementType 으로 Element를 구분할 예정.
 ```c++
 enum ElementType {
