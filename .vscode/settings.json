@@ -15,6 +15,9 @@
   "cmake.generator": "Unix Makefiles",
   "cmake.buildDirectory": "${workspaceFolder}",
   "files.associations": {
-    "ios": "cpp"
+    "ios": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "iostream": "cpp"
   }
 }

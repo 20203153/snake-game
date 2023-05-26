@@ -39,23 +39,34 @@ namespace lib {
     }
 
     void MainWindow::printMap() {
+        chtype str[3] = { ' ', ' ', 0 };
         for(int i = 0; i < map.sz; i++) {
             for(int j = 0; j < map.sz; j++) {
-                switch(map.Map[i][j]) {
+                switch(map.map[i][j]) {
                     case ElementType::ImmuneWall:
-                        mvwaddch(window, 1 + j, 1 + i, (chtype)('X' | COLOR_PAIR(ElementType::ImmuneWall)));
+                        str[0] = ' '|COLOR_PAIR(ElementType::ImmuneWall);
+                        str[1] = ' '|COLOR_PAIR(ElementType::ImmuneWall);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::Wall:
-                        mvwaddch(window, 1 + j, 1 + i, (chtype)('I' | COLOR_PAIR(ElementType::Wall)));
+                        str[0] = ' ' | COLOR_PAIR(ElementType::Wall);
+                        str[1] = ' ' | COLOR_PAIR(ElementType::Wall);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::SnakeHead:
-                        mvwaddch(window, 1 + j, 1 + i, (chtype)('O' | COLOR_PAIR(ElementType::SnakeHead)));
+                        str[0] = ' ' | COLOR_PAIR(ElementType::SnakeHead);
+                        str[1] = ' ' | COLOR_PAIR(ElementType::SnakeHead);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::SnakeBody:
-                        mvwaddch(window, 1 + j, 1 + i, (chtype)('A' | COLOR_PAIR(ElementType::SnakeBody)));
+                        str[0] = ' ' | COLOR_PAIR(ElementType::SnakeBody);
+                        str[1] = ' ' | COLOR_PAIR(ElementType::SnakeBody);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     default:
-                        mvwaddch(window, 1 + j, 1 + i, (chtype)(' ' | COLOR_PAIR(10)));
+                        str[0] = ' ' | COLOR_PAIR(10);
+                        str[1] = ' ' | COLOR_PAIR(10);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                 }
             }
         }

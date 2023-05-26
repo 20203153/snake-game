@@ -1,4 +1,5 @@
 #include "Enums.h"
+#include "Snake.h"
 
 #ifndef __LIB_MAPS__
 #define __LIB_MAPS__
@@ -9,10 +10,12 @@ namespace Maps {
     class Map {
     public:
         int sz;
-        int** Map;
+        int** map;
+        Map(int (*map)[21], int sz);
+        Map() {}
     };
 
-    Map getMap();
+    void getMap(Map &map, Snake &snake);
 }
 
 #endif

@@ -22,12 +22,14 @@ int main() {
     init_pair(ElementType::SnakeHead, COLOR_WHITE, COLOR_RED);
     init_pair(ElementType::SnakeBody, COLOR_WHITE, COLOR_MAGENTA);
 
-    int startx = (COLS - 23) / 2;
-    int starty = (LINES - 23) / 2;
+    int startx = (COLS - (21 * 2) + 2) / 2;
+    int starty = (LINES - 21 + 2) / 2;
 
-    Maps::Map map1 = Maps::getMap();
+    Maps::Map map1; Snake snake;
+    Maps::getMap(map1, snake);
+    snake.draw(map1.map);
+
     MainWindow mainWindow(map1, startx, starty);
-
     mainWindow.printMap();
 
     getch();

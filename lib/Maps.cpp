@@ -1,5 +1,6 @@
 #include "Maps.h"
 #include "Enums.h"
+#include "Snake.h"
 #include <cstring>
 #include <memory>
 
@@ -7,7 +8,7 @@ using namespace Maps;
 using namespace lib;
 using namespace std;
 
-int map[21][21] = {
+int map1[21][21] = {
     { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -29,21 +30,24 @@ int map[21][21] = {
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
     { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2 },
-
 };
 
-Map Maps::getMap() {
-    Map map1;
-
-    map1.sz = 21;
-    map1.Map = new int*[map1.sz];
+Maps::Map::Map(int (*map)[21], int sz): sz(sz) {
+    this->map = new int*[sz];
     
-    for(int i = 0; i < map1.sz; i++) {
-        map1.Map[i] = new int[map1.sz];
-        memcpy(map1.Map[i], map[i], sizeof(int) * map1.sz);
+    for(int i = 0; i < sz; i++) {
+        this->map[i] = new int[sz]{};
+        memcpy(this->map[i], map[i], sizeof(int) * sz);
     }
+}
+
+void Maps::getMap(Map &map, Snake &snake) {
+    int mapSz = 21;
+    int SnakeBody[6] = {9, 10, 10, 10, 11, 10};
+    map = Map(map1, mapSz);
+    snake = Snake(SnakeBody, 3);
     
-    return map1;
+    return;
 }
 
 /* Map::~Map() {

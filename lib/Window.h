@@ -35,7 +35,7 @@ namespace lib {
         int starty;
         Maps::Map map;
     public:
-        MainWindow(Maps::Map map, int startx = 0, int starty = 0): map(map), Window(map.sz + 2, map.sz + 2, startx, starty) {
+        MainWindow(Maps::Map map, int startx = 0, int starty = 0): map(map), Window(map.sz + 2, map.sz * 2 + 2, startx, starty) {
 
         };
         void printMap();
