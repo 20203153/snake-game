@@ -26,23 +26,15 @@ namespace lib {
         return window;
     }
 
-    template <typename ... Types>
-    void Window::printw(int x, int y, const char *fmt, Types ... args) {
-        mvwprintw(window, x, y, fmt, args...);
-    }
-    void Window::printw(int x, int y, const char *fmt) {
-        mvwprintw(window, x, y, fmt);
-    }
-
     void Window::refresh() {
         wrefresh(window);
     }
 
     void MainWindow::printMap() {
         chtype str[3] = { ' ', ' ', 0 };
-        for(int i = 0; i < map.sz; i++) {
-            for(int j = 0; j < map.sz; j++) {
-                switch(map.map[i][j]) {
+        for(int i = 0; i < map->sz; i++) {
+            for(int j = 0; j < map->sz; j++) {
+                switch(map->map[i][j]) {
                     case ElementType::ImmuneWall:
                         str[0] = ' '|COLOR_PAIR(ElementType::ImmuneWall);
                         str[1] = ' '|COLOR_PAIR(ElementType::ImmuneWall);

@@ -20,9 +20,14 @@ namespace lib {
         
         WINDOW* getWindow();
 
-        template<typename ... Types>
-        void printw(int x, int y, const char* fnt, Types ... args);
-        void printw(int x, int y, const char* fmt);
+        void printw(int x, int y, const char *fmt) {
+            mvwprintw(window, x, y, fmt);
+        }
+
+        template <typename ...Types>
+        void printw(int x, int y, const char *fmt, Types... args) {
+            mvwprintw(window, x, y, fmt, args...);
+        }
 
         void refresh();
     };
@@ -33,9 +38,9 @@ namespace lib {
         int width;
         int startx;
         int starty;
-        Maps::Map map;
+        Map *map;
     public:
-        MainWindow(Maps::Map map, int startx = 0, int starty = 0): map(map), Window(map.sz + 2, map.sz * 2 + 2, startx, starty) {
+        MainWindow(Map *map, int startx = 0, int starty = 0): map(map), Window(map->sz + 2, map->sz * 2 + 2, startx, starty) {
 
         };
         void printMap();

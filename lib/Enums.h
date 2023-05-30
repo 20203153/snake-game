@@ -1,3 +1,9 @@
+#ifdef _WIN32
+#include <ncurses/ncurses.h>
+#else
+#include <ncurses.h>
+#endif
+
 #ifndef __LIB_ENUMS__
 #define __LIB_ENUMS__
 

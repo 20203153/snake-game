@@ -1,6 +1,9 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include "Maps.h"
+
+using namespace lib;
 
 #ifndef __SNAKE__
 #define __SNAKE__
@@ -13,10 +16,11 @@ class Snake {
 public:
     Snake(int bodies[], int n, int dx = -1, int dy = 0);
     Snake() {}
-    void draw(int **game);
+    void draw(Map *map);
     int getLength() { return length; }
     int grow();
     int samller();
+    void move(char dir);
 };
 
 #endif

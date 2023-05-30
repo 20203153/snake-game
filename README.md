@@ -31,8 +31,8 @@ enum ElementType {
 ![milestone1.png](images/milestone1.png)
 
 ### 2.
-- [ ] 맵 위에 Snake를 표시.
-- [ ] 화살표 입력받아 Snake가 움직임.
+- [x] 맵 위에 Snake를 표시.
+- [x] 화살표 입력받아 Snake가 움직임.
 - 비고: lib::DirectionKey 으로 방향 설정 예정.
 ```c++
 enum DirectionKey {
@@ -42,6 +42,7 @@ enum DirectionKey {
     down = 's'
 };
 ```
+![milestone2.png](images/milestone2.png)
 
 ### 3.
 - [ ] Map 위 Growth Item 출현
