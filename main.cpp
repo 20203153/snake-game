@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "lib/Window.h"
 #include "lib/Maps.h"
 #include "lib/Snake.h"
@@ -47,7 +48,7 @@ void getMap(Map &map, Snake &snake) {
 
 int main() {
     initscr();
-    timeout(500);
+    timeout(0);
     curs_set(false);
     noecho();
     refresh();
@@ -72,6 +73,7 @@ int main() {
     int i = 0;
 
     while(map1.isContinue) {
+        usleep(500 * 1000);
         char v = getch();
         snake.move(v);
         snake.draw(&map1);
