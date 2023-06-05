@@ -21,6 +21,7 @@ namespace lib {
         void addTicks() { ticks++; return; }
 
         unsigned int lastItemTicks;
+        unsigned int lastItemUseTicks;
         std::list<std::pair<int, int>> itemLoc;
         // ~Map();
     };

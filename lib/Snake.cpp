@@ -30,6 +30,7 @@ void Snake::draw(Map *map) {
         growFlag = true;
         grow();
         map->itemLoc.remove(std::pair<int, int>(SnakeHead.first + dx, SnakeHead.second + dy));
+        map->lastItemUseTicks = map->getTicks();
     }
 
     bool smallerFlag = false;
@@ -37,6 +38,7 @@ void Snake::draw(Map *map) {
         smallerFlag = true;
         smaller();
         map->itemLoc.remove(std::pair<int, int>(SnakeHead.first + dx, SnakeHead.second + dy));
+        map->lastItemUseTicks = map->getTicks();
     }
     if(length < 3) {
         map->isContinue = false;
@@ -59,29 +61,29 @@ void Snake::draw(Map *map) {
     if(smallerFlag) {
         map->map[SnakeBody[length].first][SnakeBody[length].second] = 0;
     }
-
-    map->addTicks();
     
     if(map->getTicks() - map->lastItemTicks > 10 && map->itemLoc.size() < 3) {
         std::pair<int, int> item = { rand() % map->sz, rand() % map->sz };
-        int i = 0;
 
-        while(map->map[item.first][item.second] != 0) {
-            if (i % 2) item.first = (item.first + rand()) % map->sz;
+        while(map->map[item.first][item.second]) {
+            if (map->getTicks() % 2) item.first = (item.first + rand()) % map->sz;
             else item.second = (item.second + rand()) % map->sz;
         }
 
         map->itemLoc.push_back(item);
         map->map[item.first][item.second] = (rand() % 2 ? lib::ElementType::GrowthItem : lib::ElementType::PoisonItem);
         map->lastItemTicks = map->getTicks();
+        if (!map->lastItemUseTicks) map->lastItemUseTicks = map->lastItemTicks;
     }
 
-    if((map->getTicks() % 20) && map->getTicks() - map->lastItemTicks > 10 && map->itemLoc.size() > 0) {
+    if((map->getTicks() % 20) && map->getTicks() - map->lastItemUseTicks > 15 && map->itemLoc.size() > 0) {
         auto item = map->itemLoc.front();
         map->map[item.first][item.second] = 0;
         map->itemLoc.pop_front();
-        map->lastItemTicks = map->getTicks();
+        map->lastItemUseTicks = map->getTicks();
     }
+
+    map->addTicks();
 
     return;
 }
