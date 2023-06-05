@@ -61,8 +61,8 @@ namespace lib {
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::PoisonItem:
-                        str[0] = ' ' | COLOR_PAIR(ElementType::PoisonItem);
-                        str[1] = ' ' | COLOR_PAIR(ElementType::PoisonItem);
+                        str[0] = 'X' | COLOR_PAIR(ElementType::PoisonItem);
+                        str[1] = 'X' | COLOR_PAIR(ElementType::PoisonItem);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     default:

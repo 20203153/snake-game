@@ -6,7 +6,7 @@
 using namespace lib;
 using namespace std;
 
-Map::Map(int (*map)[21], int sz): sz(sz), isContinue(true) {
+Map::Map(int (*map)[21], int sz): sz(sz), isContinue(true), ticks(0), lastItemTicks(0), itemLoc(0) {
     this->map = new int*[sz];
     
     for(int i = 0; i < sz; i++) {
@@ -14,7 +14,7 @@ Map::Map(int (*map)[21], int sz): sz(sz), isContinue(true) {
         memcpy(this->map[i], map[i], sizeof(int) * sz);
     }
 }
-Map::Map(const Map &v): sz(v.sz), isContinue(v.isContinue) {
+Map::Map(const Map &v): sz(v.sz), isContinue(v.isContinue), ticks(v.ticks), lastItemTicks(v.lastItemTicks), itemLoc(v.itemLoc) {
     this->map = new int*[sz];
 
     for(int i = 0; i < sz; i++) {

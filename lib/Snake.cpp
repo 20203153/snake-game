@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <algorithm>
+
 #include "Snake.h"
 #include "Enums.h"
 #include "Maps.h"
@@ -13,7 +16,6 @@ Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), Sn
 }
 
 void Snake::draw(Map *map) {
-    static int iter = 0;
     if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::Wall) {
         map->isContinue = false;
         return;
@@ -27,14 +29,16 @@ void Snake::draw(Map *map) {
     if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::GrowthItem) {
         growFlag = true;
         grow();
+        map->itemLoc.remove(std::pair<int, int>(SnakeHead.first + dx, SnakeHead.second + dy));
     }
 
     bool smallerFlag = false;
     if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::PoisonItem) {
         smallerFlag = true;
         smaller();
+        map->itemLoc.remove(std::pair<int, int>(SnakeHead.first + dx, SnakeHead.second + dy));
     }
-    if(length<3) {
+    if(length < 3) {
         map->isContinue = false;
         return;
     }
@@ -56,7 +60,28 @@ void Snake::draw(Map *map) {
         map->map[SnakeBody[length].first][SnakeBody[length].second] = 0;
     }
 
-    iter++;
+    map->addTicks();
+    
+    if(map->getTicks() - map->lastItemTicks > 10 && map->itemLoc.size() < 3) {
+        std::pair<int, int> item = { rand() % map->sz, rand() % map->sz };
+        int i = 0;
+
+        while(map->map[item.first][item.second] != 0) {
+            if (i % 2) item.first = (item.first + rand()) % map->sz;
+            else item.second = (item.second + rand()) % map->sz;
+        }
+
+        map->itemLoc.push_back(item);
+        map->map[item.first][item.second] = (rand() % 2 ? lib::ElementType::GrowthItem : lib::ElementType::PoisonItem);
+        map->lastItemTicks = map->getTicks();
+    }
+
+    if((map->getTicks() % 20) && map->getTicks() - map->lastItemTicks > 10 && map->itemLoc.size() > 0) {
+        auto item = map->itemLoc.front();
+        map->map[item.first][item.second] = 0;
+        map->itemLoc.pop_front();
+        map->lastItemTicks = map->getTicks();
+    }
 
     return;
 }

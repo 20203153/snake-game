@@ -45,11 +45,12 @@ enum DirectionKey {
 ![milestone2.png](images/milestone2.png)
 
 ### 3.
-- [ ] Map 위 Growth Item 출현
-- [ ] Map 위 Poison Item 출현
+- [x] Map 위 Growth Item 출현
+- [x] Map 위 Poison Item 출현
 
 - 비고: GrothItem = 5, PoisonItem = 6 으로 lib::ElementType 설정.
 - 비고2: 게임 규칙 #2 준수.
+![milestone3.png](images/milestone3.png)
 
 ### 4.
 - [ ] Map 위 한 쌍의 Gate가 출현
