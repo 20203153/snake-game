@@ -22,6 +22,22 @@ void Snake::draw(Map *map) {
         map->isContinue = false;
         return;
     }
+
+    bool growFlag = false;
+    if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::GrowthItem) {
+        growFlag = true;
+        grow();
+    }
+
+    bool smallerFlag = false;
+    if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::PoisonItem) {
+        smallerFlag = true;
+        smaller();
+    }
+    if(length<3) {
+        map->isContinue = false;
+        return;
+    }
     
     SnakeBody.insert(SnakeBody.begin(), {SnakeHead.first, SnakeHead.second});
     map->map[SnakeHead.first += dx][SnakeHead.second += dy] = lib::ElementType::SnakeHead;
@@ -30,17 +46,27 @@ void Snake::draw(Map *map) {
         // std::cout << iter << " " << (*it).first << " " << (*it).second << std::endl;
         map->map[(*it).first][(*it).second] = lib::ElementType::SnakeBody;
     }
-    map->map[SnakeBody[length - 1].first][SnakeBody[length - 1].second] = 0;
-    SnakeBody.resize(length - 1);
+
+    if(!growFlag) {
+        map->map[SnakeBody[length - 1].first][SnakeBody[length - 1].second] = 0;
+        SnakeBody.resize(length - 1);
+    }
+
+    if(smallerFlag) {
+        map->map[SnakeBody[length].first][SnakeBody[length].second] = 0;
+    }
+
     iter++;
 
     return;
 }
 
 int Snake::grow() {
+    length++;
     return length;
 }
-int Snake::samller() {
+int Snake::smaller() {
+    length--;
     return length;
 }
 

@@ -13,6 +13,8 @@ namespace lib {
         ImmuneWall = 2,
         SnakeHead = 3,
         SnakeBody = 4,
+        GrowthItem = 5,
+        PoisonItem = 6
     };
     enum DirectionKey {
         up = 'w',

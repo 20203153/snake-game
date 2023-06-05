@@ -19,7 +19,7 @@ public:
     void draw(Map *map);
     int getLength() { return length; }
     int grow();
-    int samller();
+    int smaller();
     void move(char dir);
 };
 

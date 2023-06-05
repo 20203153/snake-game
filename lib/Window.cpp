@@ -55,6 +55,16 @@ namespace lib {
                         str[1] = ' ' | COLOR_PAIR(ElementType::SnakeBody);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
+                    case ElementType::GrowthItem:
+                        str[0] = ' ' | COLOR_PAIR(ElementType::GrowthItem);
+                        str[1] = ' ' | COLOR_PAIR(ElementType::GrowthItem);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
+                        break;
+                    case ElementType::PoisonItem:
+                        str[0] = ' ' | COLOR_PAIR(ElementType::PoisonItem);
+                        str[1] = ' ' | COLOR_PAIR(ElementType::PoisonItem);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
+                        break;
                     default:
                         str[0] = ' ' | COLOR_PAIR(10);
                         str[1] = ' ' | COLOR_PAIR(10);
