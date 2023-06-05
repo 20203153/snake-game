@@ -65,8 +65,9 @@ void Snake::draw(Map *map) {
     if(map->getTicks() - map->lastItemTicks > 10 && map->itemLoc.size() < 3) {
         std::pair<int, int> item = { rand() % map->sz, rand() % map->sz };
 
+        int i = map->getTicks() % 2;
         while(map->map[item.first][item.second]) {
-            if (map->getTicks() % 2) item.first = (item.first + rand()) % map->sz;
+            if (i++ % 2) item.first = (item.first + rand()) % map->sz;
             else item.second = (item.second + rand()) % map->sz;
         }
 
