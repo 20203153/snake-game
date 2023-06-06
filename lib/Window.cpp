@@ -65,6 +65,11 @@ namespace lib {
                         str[1] = 'X' | COLOR_PAIR(ElementType::PoisonItem);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
+                    case ElementType::Gate:
+                        str[0] = ' ' | COLOR_PAIR(ElementType::Gate);
+                        str[1] = ' ' | COLOR_PAIR(ElementType::Gate);
+                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
+                        break;
                     default:
                         str[0] = ' ' | COLOR_PAIR(10);
                         str[1] = ' ' | COLOR_PAIR(10);

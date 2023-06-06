@@ -23,6 +23,10 @@ namespace lib {
         unsigned int lastItemTicks;
         unsigned int lastItemUseTicks;
         std::list<std::pair<int, int>> itemLoc;
+
+        unsigned int lastGateTicks;
+        std::list<std::pair<int, int>> gateLoc;
+
         // ~Map();
     };
 }

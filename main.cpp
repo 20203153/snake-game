@@ -64,6 +64,7 @@ int main() {
     init_pair(ElementType::SnakeBody, COLOR_WHITE, COLOR_MAGENTA);
     init_pair(ElementType::GrowthItem, COLOR_WHITE, COLOR_GREEN);
     init_pair(ElementType::PoisonItem, COLOR_WHITE, COLOR_BLACK);
+    init_pair(ElementType::Gate, COLOR_WHITE, COLOR_RED);
     
 
     int startx = (COLS - (21 * 2) + 2) / 2;

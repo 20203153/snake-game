@@ -14,7 +14,8 @@ namespace lib {
         SnakeHead = 3,
         SnakeBody = 4,
         GrowthItem = 5,
-        PoisonItem = 6
+        PoisonItem = 6,
+        Gate = 7
     };
     enum DirectionKey {
         up = 'w',
