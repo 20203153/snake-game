@@ -15,6 +15,8 @@ Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), Sn
     return;
 }
 
+bool gate_on = false;
+
 void Snake::draw(Map *map) {
     if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::Wall) {
         map->isContinue = false;
@@ -84,8 +86,7 @@ void Snake::draw(Map *map) {
         map->lastItemUseTicks = map->getTicks();
     }
 
-
-    bool gate_on = false;
+    
 
     // create gate
     if((gate_on == false) && (map->getTicks()-map->lastGateTicks)>14){
@@ -94,10 +95,10 @@ void Snake::draw(Map *map) {
         for(int i=1; i<20; i++){
             random_2[i] = i;
         }
-        
+
+        int gate_x, gate_y;
         for(int j=0; j<2; j++){
-            int gate_x, gate_y;
-            bool dec_xy = rand()%2 ? true : false;
+            bool dec_xy = (rand()%2 ? true : false);
             if(dec_xy){
                 gate_x = random_1[rand()%2];
                 gate_y = random_2[rand()%19];
@@ -106,22 +107,38 @@ void Snake::draw(Map *map) {
                 gate_y = random_1[rand()%2];
                 gate_x = random_2[rand()%19];
             }
-            std::pair<int, int> gate = {gate_x, gate_y};
+
+            std::pair<int, int> gate;
+            gate = {gate_x, gate_y};
+            if(map->map[gate.first][gate.second] == 2){
+                j--;
+                continue;
+            }
 
             map->map[gate.first][gate.second] = lib::ElementType::Gate;
             map->gateLoc.push_back(gate);
-        }
+
+            if(j==1){
+                auto it1 = map->gateLoc.begin();
+                auto it2 = map->gateLoc.begin(); it2++;
+                if((it1->first == it2->first) && (it1->second == it2->second)){
+                    j--;
+                    continue;
+                }
+            }            
+        }     
 
         gate_on = true;
         map->lastGateTicks = map->getTicks();
     }
 
     // delete gate
-    if((gate_on == true) && (map->getTicks() - map->lastGateTicks > 14)){
+    if((gate_on == true) && (map->getTicks() - map->lastGateTicks > 10)){
+        auto it = map->gateLoc.begin();
+        for(; it != map->gateLoc.end(); it++){;
+            map->map[it->first][it->second] = 1;
+        }
         for(int i=0; i<2; i++){
-            auto gate = map->gateLoc.front();
-            gate = map->gateLoc.front();
-            map->map[gate.first][gate.second] = 1;
             map->gateLoc.pop_front();
         }
         gate_on = false;
@@ -130,6 +147,7 @@ void Snake::draw(Map *map) {
     map->addTicks();
 
     return;
+    
 }
 
 int Snake::grow() {
