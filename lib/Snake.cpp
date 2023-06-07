@@ -16,6 +16,7 @@ Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), Sn
 }
 
 bool gate_on = false;
+bool gateFlag = false;
 
 void Snake::draw(Map *map) {
     if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::Wall) {
@@ -48,7 +49,63 @@ void Snake::draw(Map *map) {
     }
     
     SnakeBody.insert(SnakeBody.begin(), {SnakeHead.first, SnakeHead.second});
-    map->map[SnakeHead.first += dx][SnakeHead.second += dy] = lib::ElementType::SnakeHead;
+    // gate in (head)
+    if(map->map[SnakeHead.first+dx][SnakeHead.second+dy] == lib::ElementType::Gate) {
+        auto gate1 = map->gateLoc.begin();
+        auto gate2 = map->gateLoc.begin(); gate2++;
+
+        if(map->map[SnakeHead.first+dx][SnakeHead.second+dy] == map->map[gate1->first][gate1->second]){
+            if(gate2->first == 0){
+                map->map[(gate2->first)+1][gate2->second] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate2->first+1;
+                SnakeHead.second = gate2->second;
+            }
+            else if(gate2->first == map->sz-1){
+                map->map[(gate2->first)-1][gate2->second] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate2->first-1;
+                SnakeHead.second = gate2->second;
+            }
+            else if(gate2->second == 0){
+                map->map[gate2->first][gate2->second+1] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate2->first;
+                SnakeHead.second = gate2->second+1;
+            }
+            else if(gate2->second == map->sz-1){
+                map->map[gate2->first][gate2->second-1] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate2->first;
+                SnakeHead.second = gate2->second-1;
+            }
+        }
+        else{
+            map->map[SnakeHead.first+dx][SnakeHead.second+dy];
+            if(gate1->first == 0){
+                map->map[(gate1->first)+1][gate1->second] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate1->first+1;
+                SnakeHead.second = gate1->second;
+            }
+            else if(gate1->first == map->sz-1){
+                map->map[(gate1->first)-1][gate1->second] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate1->first-1;
+                SnakeHead.second = gate1->second;
+            }
+            else if(gate1->second == 0){
+                map->map[gate1->first][gate1->second+1] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate1->first;
+                SnakeHead.second = gate1->second+1;
+            }
+            else if(gate1->second == map->sz-1){
+                map->map[gate1->first][gate1->second-1] = lib::ElementType::SnakeHead;
+                SnakeHead.first = gate1->first;
+                SnakeHead.second = gate1->second-1;
+            }
+        }
+
+        gateFlag = true; // gate passing start
+        map->addGateTicks(); // gate must not disappear
+    }
+    else{
+        map->map[SnakeHead.first += dx][SnakeHead.second += dy] = lib::ElementType::SnakeHead;
+    }
     auto it = SnakeBody.begin();
     for(int i = 0; i < length - 1; i++, it++) {
         // std::cout << iter << " " << (*it).first << " " << (*it).second << std::endl;
@@ -85,11 +142,43 @@ void Snake::draw(Map *map) {
         map->itemLoc.pop_front();
         map->lastItemUseTicks = map->getTicks();
     }
-
+    
     
 
+    static int gate_throwin_count = 0;
+    if(gateFlag){
+        gate_throwin_count++;
+        if(gate_throwin_count>1){
+            map->addGateTicks();
+        }
+    }
+
+    if(gate_throwin_count>getLength()){
+        gateFlag = false;
+        gate_throwin_count = 0;
+    }
+
+    /*// gate in (body)
+    if(gate_throwin_count>1) {
+        int i; i = gate_throwin_count-1;
+        auto gate1 = map->gateLoc.begin();
+        auto gate2 = map->gateLoc.end(); gate2--;
+
+        if(map->map[SnakeBody[i-1].first + dx][SnakeBody[i-1].second + dy] // 
+            == map->map[gate1->first][gate1->second]){
+            SnakeBody[i-1].first = gate1->first;
+            SnakeBody[i-1].second = gate1->second;
+        }
+        else{
+            SnakeBody[i-1].first = gate2->first;
+            SnakeBody[i-1].second = gate2->second;
+        }
+
+        map->addGateTicks(); // gate must not disappear
+    }*/
+
     // create gate
-    if((gate_on == false) && (map->getTicks()-map->lastGateTicks)>14){
+    if((gate_on == false) && (map->getTicks()-map->lastGateTicks)>25){
         int random_1[2] = {0, (map->sz)-1};
         int random_2[19];
         for(int i=1; i<20; i++){
@@ -133,7 +222,7 @@ void Snake::draw(Map *map) {
     }
 
     // delete gate
-    if((gate_on == true) && (map->getTicks() - map->lastGateTicks > 10)){
+    if((gate_on == true) && (map->getTicks() - map->lastGateTicks > 20)){
         auto it = map->gateLoc.begin();
         for(; it != map->gateLoc.end(); it++){;
             map->map[it->first][it->second] = 1;
