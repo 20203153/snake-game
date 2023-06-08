@@ -27,6 +27,7 @@ namespace lib {
         unsigned int lastGateTicks;
         unsigned int gateThrowinCnt;
         bool gateOn;
+        bool gateFlag;
         std::list<std::pair<int, int>> gateLoc;
         std::list<std::pair<int, int>> wallLoc;
 

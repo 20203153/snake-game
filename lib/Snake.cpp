@@ -15,9 +15,6 @@ Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), Sn
     return;
 }
 
-bool gate_on = false;
-bool gateFlag = false;
-
 void Snake::draw(Map *map) {
     auto next = map->nextMove(SnakeHead.first, SnakeHead.second, dx, dy);
     if(map->map[next.first][next.second] == lib::ElementType::Wall) {
@@ -53,7 +50,7 @@ void Snake::draw(Map *map) {
     
     // gate pass
     if(map->map[next.first][next.second] == lib::ElementType::Gate) {
-        gateFlag = true; // gate passing start
+        map->gateFlag = true; // gate passing start
         auto gate1 = map->gateLoc.begin();
         auto gate2 = map->gateLoc.begin()++;
 
@@ -192,13 +189,13 @@ void Snake::draw(Map *map) {
     }
     
     // gate passing time count
-    if(gateFlag) {
+    if(map->gateFlag) {
         map->gateThrowinCnt++;
         map->lastGateTicks++;
     }
 
     if(map->gateThrowinCnt > getLength()){
-        gateFlag = false;
+        map->gateFlag = false;
         map->gateThrowinCnt = 0;
     }
 
