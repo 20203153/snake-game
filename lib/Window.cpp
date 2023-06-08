@@ -66,8 +66,8 @@ namespace lib {
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::Gate:
-                        str[0] = ' ' | COLOR_PAIR(ElementType::Gate);
-                        str[1] = ' ' | COLOR_PAIR(ElementType::Gate);
+                        str[0] = 'G' | COLOR_PAIR(ElementType::Gate);
+                        str[1] = 'G' | COLOR_PAIR(ElementType::Gate);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     default:
