@@ -7,7 +7,9 @@
 
 using namespace lib;
 
-Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), SnakeBody(n - 1, {0, 0}) {
+const std::pair<int, int> clockwise[4] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0} };
+
+Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), SnakeBody(n - 1) {
     SnakeHead = std::pair<int, int>(bodies[0], bodies[1]);
     for(int i = 1; i < n; i++) {
         SnakeBody[i - 1] = {bodies[2 * i], bodies[2 * i + 1]};
@@ -54,101 +56,45 @@ void Snake::draw(Map *map) {
         auto gate1 = map->gateLoc.begin();
         auto gate2 = map->gateLoc.begin()++;
 
-        std::pair<int, int> clockwise[12] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-        int pattern_gate[4] = {0, 1, -1, 2};
+        bool flag = true;
+        int i = 0;
 
-        
+        if(!dx) {
+            i = (dy > 0 ? 2 : 0);
+        } else {
+            i = (dx > 0 ? 3 : 1);
+        }
+
+        std::pair<int, int>nextPred;
+
         // When Gate1 is input gate
-        if((next.first == gate1->first) && (next.second == gate1->second)){
-                // 벽(가장자리)에 Gate가 있을 때
-            if(gate2->first == 0){
-                map->map[(gate2->first)+1][gate2->second] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate2->first+1;
-                SnakeHead.second = gate2->second;
-                dx = 1; dy = 0;
-            }
-            else if(gate2->first == map->sz-1){
-                map->map[(gate2->first)-1][gate2->second] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate2->first-1;
-                SnakeHead.second = gate2->second;
-                dx = -1; dy = 0;
-            }
-            else if(gate2->second == 0){
-                map->map[gate2->first][gate2->second+1] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate2->first;
-                SnakeHead.second = gate2->second+1;
-                dx = 0; dy = 1;
-            }
-            else if(gate2->second == map->sz-1){
-                map->map[gate2->first][gate2->second-1] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate2->first;
-                SnakeHead.second = gate2->second-1;
-                dx = 0; dy = -1;
-            }
-            else{
-                // Choose Direction (ClockWise)
-                int i;
-                for(i=0; i<4; i++){
-                    if((clockwise[i].first == dx) && (clockwise[i].second == dy)) break;
+        if(next.first == gate1->first && next.second == gate1->second){
+            // Choose Direction (ClockWise)
+            while(flag) {
+                nextPred = map->nextMove((*gate2).first, (*gate2).second, clockwise[i].first, clockwise[i].second);
+                if(!map->map[nextPred.first][nextPred.second]) {
+                    flag = false;
+                    dx = clockwise[i].first;
+                    dy = clockwise[i].second;
                 }
-                for(int j=0; j<4; j++, i++){
-                    dx = clockwise[i+pattern_gate[j]].first; dy = clockwise[i+pattern_gate[j]].second;
-                    if((map->map[gate2->first+dx][gate2->second+dy] == 0) && ((gate2->first+dx)>=0) && ((gate2->second+dy)>=0) && ((gate2->first+dx)<=20) && ((gate2->second+dy)<=20)){
-                        map->map[gate2->first+dx][gate2->second+dy] = lib::ElementType::SnakeHead;
-                        SnakeHead.first = gate2->first+dx;
-                        SnakeHead.second = gate2->second+dy;
-                        break;
-                    }
+                else i = (i + 1) % 4;
+            }
+        } else {
+            // Choose Direction (ClockWise)
+            while(flag) {
+                nextPred = map->nextMove((*gate1).first, (*gate1).second, clockwise[i].first, clockwise[i].second);
+                if(!map->map[nextPred.first][nextPred.second]) {
+                    flag = false;
+                    dx = clockwise[i].first;
+                    dy = clockwise[i].second;
                 }
+                else i = (i + 1) % 4;
             }
         }
-        else{
-
-            if(gate1->first == 0){
-                map->map[(gate1->first)+1][gate1->second] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate1->first+1;
-                SnakeHead.second = gate1->second;
-                dx = 1; dy = 0;
-            }
-            else if(gate1->first == map->sz-1){
-                map->map[(gate1->first)-1][gate1->second] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate1->first-1;
-                SnakeHead.second = gate1->second;
-                dx = -1; dy = 0;
-            }
-            else if(gate1->second == 0){
-                map->map[gate1->first][gate1->second+1] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate1->first;
-                SnakeHead.second = gate1->second+1;
-                dx = 0; dy = 1;
-            }
-            else if(gate1->second == map->sz-1){
-                map->map[gate1->first][gate1->second-1] = lib::ElementType::SnakeHead;
-                SnakeHead.first = gate1->first;
-                SnakeHead.second = gate1->second-1;
-                dx = 0; dy = -1;
-            }
-            else{
-                // Choose Direction (ClockWise)
-                int i;
-                for(i=0; i<4; i++){
-                    if((clockwise[i].first == dx) && (clockwise[i].second == dy)) break;
-                }
-                for(int j=0; j<4; j++, i++){
-                    dx = clockwise[i].first; dy = clockwise[i].second;
-                    if((map->map[gate1->first+dx][gate1->second+dy] == 0) && ((gate1->first+dx)>=0) && ((gate1->second+dy)>=0) && ((gate1->first+dx)<=20) && ((gate1->second+dy)<=20)){
-                        map->map[gate1->first+dx][gate1->second+dy] = lib::ElementType::SnakeHead;
-                        SnakeHead.first = gate1->first+dx;
-                        SnakeHead.second = gate1->second+dy;
-                        break;
-                    }
-                }
-            }
-        }
-    } else {
-        map->map[next.first][next.second] = lib::ElementType::SnakeHead;
-        SnakeHead = next;
+        next = nextPred;
     }
+    map->map[next.first][next.second] = lib::ElementType::SnakeHead;
+    SnakeHead = next;
 
     auto it = SnakeBody.begin();
     for(int i = 0; i < length - 1; i++, it++) {
@@ -224,7 +170,7 @@ void Snake::draw(Map *map) {
     }
 
     // delete gate
-    if(map->gateOn && (map->getTicks() - map->lastGateTicks > 10)) {
+    if(map->gateOn && (map->getTicks() - map->lastGateTicks > 20)) {
         for(auto it = map->gateLoc.begin(); it != map->gateLoc.end(); it++){;
             map->map[(*it).first][(*it).second] = lib::ElementType::Wall;
         }
