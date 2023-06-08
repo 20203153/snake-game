@@ -205,16 +205,26 @@ void Snake::draw(Map *map) {
 
     // create gate
     if((gate_on == false) && (map->getTicks()-map->lastGateTicks)>25){
-        int random_xy[21];
-        for(int i=0; i<21; i++){
-            random_xy[i] = i;
+        int random_1[2] = {0, map->sz - 1};
+        int random_2[19] = {0};
+        for(int i=0; i<19; i++){
+            random_2[i] = i+1;
         }
+
+        bool dec_xy = rand()%2 ? true : false;
 
         int gate_x, gate_y;
         for(int j=0; j<2; j++){
-            gate_x = random_xy[rand()%21];
-            gate_y = random_xy[rand()%21];
-            if((map->map[gate_x][gate_y] == lib::ElementType::ImmuneWall) || (map->map[gate_x][gate_y] == lib::ElementType::PoisonItem) || (map->map[gate_x][gate_y] == lib::ElementType::GrowthItem)){
+            if(dec_xy){
+                gate_x = random_1[rand()%2];
+                gate_y = random_2[rand()%19];
+            }
+            else{
+                gate_x = random_2[rand()%19];
+                gate_y = random_1[rand()%2];
+            }
+            
+            if(map->map[gate_x][gate_y] == lib::ElementType::ImmuneWall){
                 j--;
                 continue;
             }
