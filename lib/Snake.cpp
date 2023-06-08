@@ -48,16 +48,17 @@ void Snake::draw(Map *map) {
         return;
     }
     
-    SnakeBody.insert(SnakeBody.begin(), {SnakeHead.first, SnakeHead.second});
+    SnakeBody.insert(SnakeBody.begin(), SnakeHead);
     
     // gate pass
     if(map->map[next.first][next.second] == lib::ElementType::Gate) {
         map->gateFlag = true; // gate passing start
         auto gate1 = map->gateLoc.begin();
-        auto gate2 = map->gateLoc.begin()++;
+        auto gate2 = map->gateLoc.begin();
+        gate2++;
 
         bool flag = true;
-        int i = 0;
+        int i = 0, j = 0;
 
         if(!dx) {
             i = (dy > 0 ? 2 : 0);
@@ -66,32 +67,30 @@ void Snake::draw(Map *map) {
         }
 
         std::pair<int, int>nextPred;
+        std::pair<int, int>gate;
 
         // When Gate1 is input gate
         if(next.first == gate1->first && next.second == gate1->second){
-            // Choose Direction (ClockWise)
-            while(flag) {
-                nextPred = map->nextMove((*gate2).first, (*gate2).second, clockwise[i].first, clockwise[i].second);
-                if(!map->map[nextPred.first][nextPred.second]) {
-                    flag = false;
-                    dx = clockwise[i].first;
-                    dy = clockwise[i].second;
-                }
-                else i = (i + 1) % 4;
-            }
+            gate = *gate2;
         } else {
-            // Choose Direction (ClockWise)
-            while(flag) {
-                nextPred = map->nextMove((*gate1).first, (*gate1).second, clockwise[i].first, clockwise[i].second);
-                if(!map->map[nextPred.first][nextPred.second]) {
-                    flag = false;
-                    dx = clockwise[i].first;
-                    dy = clockwise[i].second;
-                }
-                else i = (i + 1) % 4;
+        // When Gate2 is input gate
+            gate = *gate1;
+        }
+        // Choose Direction (ClockWise)
+        while(flag) {
+            nextPred = map->nextMove(gate.first, gate.second, clockwise[i].first, clockwise[i].second);
+            if(map->map[nextPred.first][nextPred.second] == 0 ||
+                map->map[nextPred.first][nextPred.second] == lib::ElementType::GrowthItem ||
+                map->map[nextPred.first][nextPred.second] == lib::ElementType::PoisonItem
+            ) {
+                flag = false;
+                dx = clockwise[i].first;
+                dy = clockwise[i].second;
+                next = nextPred;
+            } else {
+                i = (i + 1) % 4;
             }
         }
-        next = nextPred;
     }
     map->map[next.first][next.second] = lib::ElementType::SnakeHead;
     SnakeHead = next;
