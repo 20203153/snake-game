@@ -25,8 +25,14 @@ namespace lib {
         std::list<std::pair<int, int>> itemLoc;
 
         unsigned int lastGateTicks;
-        void addGateTicks() { lastGateTicks++; return; }
+        unsigned int gateThrowinCnt;
+        bool gateOn;
         std::list<std::pair<int, int>> gateLoc;
+        std::list<std::pair<int, int>> wallLoc;
+
+        std::pair<int, int> nextMove(int x, int y, int dx, int dy) {
+            return std::pair<int, int>((x + dx + sz) % sz, (y + dy + sz) % sz);
+        }
 
         // ~Map();
     };

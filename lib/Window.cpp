@@ -36,45 +36,37 @@ namespace lib {
             for(int j = 0; j < map->sz; j++) {
                 switch(map->map[i][j]) {
                     case ElementType::ImmuneWall:
-                        str[0] = ' '|COLOR_PAIR(ElementType::ImmuneWall);
-                        str[1] = ' '|COLOR_PAIR(ElementType::ImmuneWall);
+                        str[0] = str[1] = ' '|COLOR_PAIR(ElementType::ImmuneWall);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::Wall:
-                        str[0] = ' ' | COLOR_PAIR(ElementType::Wall);
-                        str[1] = ' ' | COLOR_PAIR(ElementType::Wall);
+                        str[0] = str[1] = ' ' | COLOR_PAIR(ElementType::Wall);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::SnakeHead:
-                        str[0] = ' ' | COLOR_PAIR(ElementType::SnakeHead);
-                        str[1] = ' ' | COLOR_PAIR(ElementType::SnakeHead);
+                        str[0] = str[1] = ' ' | COLOR_PAIR(ElementType::SnakeHead);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::SnakeBody:
-                        str[0] = ' ' | COLOR_PAIR(ElementType::SnakeBody);
-                        str[1] = ' ' | COLOR_PAIR(ElementType::SnakeBody);
+                        str[0] = str[1] = ' ' | COLOR_PAIR(ElementType::SnakeBody);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::GrowthItem:
-                        str[0] = ' ' | COLOR_PAIR(ElementType::GrowthItem);
-                        str[1] = ' ' | COLOR_PAIR(ElementType::GrowthItem);
+                        str[0] = str[1] = ' ' | COLOR_PAIR(ElementType::GrowthItem);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::PoisonItem:
-                        str[0] = 'X' | COLOR_PAIR(ElementType::PoisonItem);
-                        str[1] = 'X' | COLOR_PAIR(ElementType::PoisonItem);
+                        str[0] = str[1] = 'X' | COLOR_PAIR(ElementType::PoisonItem);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     case ElementType::Gate:
-                        str[0] = 'G' | COLOR_PAIR(ElementType::Gate);
-                        str[1] = 'G' | COLOR_PAIR(ElementType::Gate);
+                        str[0] = str[1] = 'G' | COLOR_PAIR(ElementType::Gate);
                         mvwaddchstr(window, 1 + j, 1 + i * 2, str);
                         break;
                     default:
-                        str[0] = ' ' | COLOR_PAIR(10);
-                        str[1] = ' ' | COLOR_PAIR(10);
-                        mvwaddchstr(window, 1 + j, 1 + i * 2, str);
+                        str[0] = str[1] = ' ' | COLOR_PAIR(10);
                 }
+                mvwaddchstr(window, 1 + j, 1 + i * 2, str);
             }
         }
         refresh();

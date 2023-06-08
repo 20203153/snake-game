@@ -53,11 +53,12 @@ enum DirectionKey {
 ![milestone3.png](images/milestone3.png)
 
 ### 4.
-- [ ] Map 위 한 쌍의 Gate가 출현
-- [ ] Gate에 Snake가 통과할 수 있도록 수정.
+- [x] Map 위 한 쌍의 Gate가 출현
+- [x] Gate에 Snake가 통과할 수 있도록 수정.
 
 - 비고: Gate = 7 으로 lib::ElementType 설정.
 - 비고2: 게임 규칙 #3 #4 #5 준수.
+![milestone4.png](images/milestone4.png)
 
 ### 5.
 - [ ] 우측에 게임 점수 표시.

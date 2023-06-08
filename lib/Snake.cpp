@@ -19,20 +19,21 @@ bool gate_on = false;
 bool gateFlag = false;
 
 void Snake::draw(Map *map) {
-    if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::Wall) {
+    auto next = map->nextMove(SnakeHead.first, SnakeHead.second, dx, dy);
+    if(map->map[next.first][next.second] == lib::ElementType::Wall) {
         map->isContinue = false;
         return;
     }
-    if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::SnakeBody) {
+    if(map->map[next.first][next.second] == lib::ElementType::SnakeBody) {
         map->isContinue = false;
         return;
     }
 
     bool growFlag = false;
-    if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::GrowthItem) {
+    if(map->map[next.first][next.second] == lib::ElementType::GrowthItem) {
         growFlag = true;
         grow();
-        map->itemLoc.remove(std::pair<int, int>(SnakeHead.first + dx, SnakeHead.second + dy));
+        map->itemLoc.remove(next);
         map->lastItemUseTicks = map->getTicks();
     }
 
@@ -40,7 +41,7 @@ void Snake::draw(Map *map) {
     if(map->map[SnakeHead.first + dx][SnakeHead.second + dy] == lib::ElementType::PoisonItem) {
         smallerFlag = true;
         smaller();
-        map->itemLoc.remove(std::pair<int, int>(SnakeHead.first + dx, SnakeHead.second + dy));
+        map->itemLoc.remove(next);
         map->lastItemUseTicks = map->getTicks();
     }
     if(length < 3) {
@@ -49,20 +50,19 @@ void Snake::draw(Map *map) {
     }
     
     SnakeBody.insert(SnakeBody.begin(), {SnakeHead.first, SnakeHead.second});
-
     
     // gate pass
-    if(map->map[SnakeHead.first+dx][SnakeHead.second+dy] == lib::ElementType::Gate) {
+    if(map->map[next.first][next.second] == lib::ElementType::Gate) {
         gateFlag = true; // gate passing start
         auto gate1 = map->gateLoc.begin();
-        auto gate2 = map->gateLoc.begin(); gate2++;
+        auto gate2 = map->gateLoc.begin()++;
 
         std::pair<int, int> clockwise[12] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 0}, {0, 1}, {-1, 0}};
         int pattern_gate[4] = {0, 1, -1, 2};
 
         
         // When Gate1 is input gate
-        if((SnakeHead.first+dx == gate1->first) && (SnakeHead.second+dy == gate1->second)){
+        if((next.first == gate1->first) && (next.second == gate1->second)){
                 // 벽(가장자리)에 Gate가 있을 때
             if(gate2->first == 0){
                 map->map[(gate2->first)+1][gate2->second] = lib::ElementType::SnakeHead;
@@ -148,14 +148,13 @@ void Snake::draw(Map *map) {
                 }
             }
         }
+    } else {
+        map->map[next.first][next.second] = lib::ElementType::SnakeHead;
+        SnakeHead = next;
+    }
 
-    }
-    else{
-        map->map[SnakeHead.first += dx][SnakeHead.second += dy] = lib::ElementType::SnakeHead;
-    }
     auto it = SnakeBody.begin();
     for(int i = 0; i < length - 1; i++, it++) {
-        // std::cout << iter << " " << (*it).first << " " << (*it).second << std::endl;
         map->map[(*it).first][(*it).second] = lib::ElementType::SnakeBody;
     }
 
@@ -168,6 +167,7 @@ void Snake::draw(Map *map) {
         map->map[SnakeBody[length].first][SnakeBody[length].second] = 0;
     }
     
+    // add item on field
     if(map->getTicks() - map->lastItemTicks > 10 && map->itemLoc.size() < 3) {
         std::pair<int, int> item = { rand() % map->sz, rand() % map->sz };
 
@@ -183,6 +183,7 @@ void Snake::draw(Map *map) {
         if (!map->lastItemUseTicks) map->lastItemUseTicks = map->lastItemTicks;
     }
 
+    // remove item on field
     if((map->getTicks() % 20) && map->getTicks() - map->lastItemUseTicks > 15 && map->itemLoc.size() > 0) {
         auto item = map->itemLoc.front();
         map->map[item.first][item.second] = 0;
@@ -190,86 +191,53 @@ void Snake::draw(Map *map) {
         map->lastItemUseTicks = map->getTicks();
     }
     
-    
     // gate passing time count
-    static int gate_throwin_count = 0;
-    if(gateFlag){
-        gate_throwin_count++;
-        map->addGateTicks();
+    if(gateFlag) {
+        map->gateThrowinCnt++;
+        map->lastGateTicks++;
     }
 
-    if(gate_throwin_count>getLength()){
+    if(map->gateThrowinCnt > getLength()){
         gateFlag = false;
-        gate_throwin_count = 0;
+        map->gateThrowinCnt = 0;
     }
 
     // create gate
-    if((gate_on == false) && (map->getTicks()-map->lastGateTicks)>25){
-        int random_1[2] = {0, map->sz - 1};
-        int random_2[19] = {0};
-        for(int i=0; i<19; i++){
-            random_2[i] = i+1;
+    if(!map->gateOn && (map->getTicks() - map->lastGateTicks) > 25) {
+        auto gate1 = map->wallLoc.begin();
+        auto gate2 = map->wallLoc.begin();
+        
+        std::advance(gate1, rand() % map->wallLoc.size());
+        std::advance(gate2, rand() % map->wallLoc.size());
+
+        int i = map->getTicks() % 2;
+        while(gate1 == gate2) {
+            if(i % 2) std::advance(gate1, rand() % map->wallLoc.size());
+            else std::advance(gate2, rand() % map->wallLoc.size());
         }
 
-        bool dec_xy = rand()%2 ? true : false;
+        map->map[(*gate1).first][(*gate1).second] = lib::ElementType::Gate;
+        map->map[(*gate2).first][(*gate2).second] = lib::ElementType::Gate;
 
-        int gate_x, gate_y;
-        for(int j=0; j<2; j++){
-            if(dec_xy){
-                gate_x = random_1[rand()%2];
-                gate_y = random_2[rand()%19];
-            }
-            else{
-                gate_x = random_2[rand()%19];
-                gate_y = random_1[rand()%2];
-            }
-            
-            if(map->map[gate_x][gate_y] == lib::ElementType::ImmuneWall){
-                j--;
-                continue;
-            }
+        map->gateLoc.push_back((*gate1));
+        map->gateLoc.push_back((*gate2));
 
-            std::pair<int, int> gate;
-            gate = {gate_x, gate_y};
-
-            map->map[gate.first][gate.second] = lib::ElementType::Gate;
-            map->gateLoc.push_back(gate);
-
-            if(j==1){
-                auto it1 = map->gateLoc.begin();
-                auto it2 = map->gateLoc.begin(); it2++;
-                if((it1->first == it2->first) && (it1->second == it2->second)){
-                    j--;
-                    continue;
-                }
-            }            
-        }     
-
-        gate_on = true;
+        map->gateOn = true;
         map->lastGateTicks = map->getTicks();
     }
 
     // delete gate
-    if((gate_on == true) && (map->getTicks() - map->lastGateTicks > 20)){
-        auto it = map->gateLoc.begin();
-        for(; it != map->gateLoc.end(); it++){;
-            if((it->first >= 1) && (it->first <= 19) && (it->second >= 1) && (it->second <= 19)){
-                map->map[it->first][it->second] = 0;
-            }
-            else{
-                map->map[it->first][it->second] = 1;
-            }
+    if(map->gateOn && (map->getTicks() - map->lastGateTicks > 10)) {
+        for(auto it = map->gateLoc.begin(); it != map->gateLoc.end(); it++){;
+            map->map[(*it).first][(*it).second] = lib::ElementType::Wall;
         }
-        for(int i=0; i<2; i++){
-            map->gateLoc.pop_front();
-        }
-        gate_on = false;
+        map->gateLoc.clear();
+        map->gateOn = false;
     }
 
     map->addTicks();
 
     return;
-    
 }
 
 int Snake::grow() {
