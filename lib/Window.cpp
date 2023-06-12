@@ -18,16 +18,11 @@ namespace lib {
     }
 
     Window::~Window() {
-        wrefresh(window);
         delwin(window);
     }
 
     WINDOW* Window::getWindow() {
         return window;
-    }
-
-    void Window::refresh() {
-        wrefresh(window);
     }
 
     void MainWindow::printMap() {
@@ -69,6 +64,7 @@ namespace lib {
                 mvwaddchstr(window, 1 + j, 1 + i * 2, str);
             }
         }
-        refresh();
+
+        wrefresh(window);
     }
 }

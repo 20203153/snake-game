@@ -4,6 +4,7 @@
 #include "lib/Window.h"
 #include "lib/Maps.h"
 #include "lib/Snake.h"
+#include "lib/AdditionalWindow.h"
 
 #ifdef _WIN32
 #include <ncurses/ncurses.h>
@@ -67,16 +68,19 @@ int main() {
     init_pair(ElementType::Gate, COLOR_WHITE, COLOR_BLUE);
     
 
-    int startx = (COLS - (21 * 2) + 2) / 2;
-    int starty = (LINES - 21 + 2) / 2;
+    int Gstartx = (COLS - (21 * 2) - 14) / 2;
+    int Gstarty = (LINES - 21 + 2) / 2;
 
     int SnakeBody[6] = {10, 10, 11, 10, 12, 10};
     Map map1(mapData_1, 21);
     Snake snake(SnakeBody, 3);
 
-    MainWindow mainWindow(&map1, startx, starty);
+    MainWindow mainWindow(&map1, Gstartx, Gstarty);
     snake.draw(&map1);
     mainWindow.printMap();
+    
+    ScoreboardWindow sWindow(Gstartx + 46, Gstarty, &map1, &snake);
+    sWindow.refresh();
 
     while(map1.isContinue) {
         usleep(500 * 1000);
@@ -84,13 +88,23 @@ int main() {
         snake.move(v);
         snake.draw(&map1);
         mainWindow.printMap();
-        mainWindow.printw(22, 0, "Continue! %d", (map1.getTicks()) / 2);
+        sWindow.refresh();
     }
 
-    mainWindow.printw(11, 15, "Game Over!");
-    getch();
+    while(true) {
+        mainWindow.printw(11, 15, "Game Over!");
+        mainWindow.refresh();
+
+        char v = getch();
+        if((v >= 'a') && (v <= 'z')) break;
+        usleep(500 * 5000);
+    }
+
     mainWindow.~MainWindow();
+    sWindow.~ScoreboardWindow();
+    refresh();
     endwin();
+    getch();
 
     return 0;
 }

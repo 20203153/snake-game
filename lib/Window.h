@@ -29,7 +29,9 @@ namespace lib {
             mvwprintw(window, x, y, fmt, args...);
         }
 
-        void refresh();
+        void refresh() {
+            wrefresh(window); return;
+        }
     };
 
     class MainWindow : public Window {
@@ -43,6 +45,9 @@ namespace lib {
         MainWindow(Map *map, int startx = 0, int starty = 0): map(map), Window(map->sz + 2, map->sz * 2 + 2, startx, starty) {
 
         };
+        ~MainWindow() {
+            delwin(window);
+        }
         void printMap();
     };
 }
