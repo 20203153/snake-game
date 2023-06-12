@@ -12,6 +12,10 @@
 namespace lib {
     class Window {
     protected:
+        int height;
+        int width;
+        int startx;
+        int starty;
         WINDOW *window;
     
     public:
@@ -36,15 +40,12 @@ namespace lib {
 
     class MainWindow : public Window {
     private:
-        int height;
-        int width;
-        int startx;
-        int starty;
         Map *map;
     public:
         MainWindow(Map *map, int startx = 0, int starty = 0): map(map), Window(map->sz + 2, map->sz * 2 + 2, startx, starty) {
-
-        };
+        }
+        MainWindow(int startx = 0, int starty = 0): Window(21, 21, startx, starty) {
+        }
         ~MainWindow() {
             delwin(window);
         }

@@ -5,6 +5,7 @@
 #include "lib/Maps.h"
 #include "lib/Snake.h"
 #include "lib/AdditionalWindow.h"
+#include "lib/GetStage.h"
 
 #ifdef _WIN32
 #include <ncurses/ncurses.h>
@@ -14,39 +15,6 @@
 
 using namespace std;
 using namespace lib;
-
-int mapData_1[21][21] = {
-    { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2 },
-};
-
-void getMap(Map &map, Snake &snake) {
-    int mapSz = 21;
-    int SnakeBody[6] = {10, 10, 11, 10, 12, 10};
-    map = Map(mapData_1, mapSz);
-    snake = Snake(SnakeBody, 6);
-    
-    return;
-}
 
 int main() {
     initscr();
@@ -66,45 +34,69 @@ int main() {
     init_pair(ElementType::GrowthItem, COLOR_WHITE, COLOR_GREEN);
     init_pair(ElementType::PoisonItem, COLOR_WHITE, COLOR_BLACK);
     init_pair(ElementType::Gate, COLOR_WHITE, COLOR_BLUE);
-    
 
-    int Gstartx = (COLS - (21 * 2) - 14) / 2;
-    int Gstarty = (LINES - 21 + 2) / 2;
+    bool isGameover = false;
 
-    int SnakeBody[6] = {10, 10, 11, 10, 12, 10};
-    Map map1(mapData_1, 21);
-    Snake snake(SnakeBody, 3);
+    for(int i = 0; i < 1; i++) {
+        Map map;
+        Snake snake;
+        vector<MissionData> missionData;
+        getStage(1, map, snake, missionData);
 
-    MainWindow mainWindow(&map1, Gstartx, Gstarty);
-    snake.draw(&map1);
-    mainWindow.printMap();
-    
-    ScoreboardWindow sWindow(Gstartx + 46, Gstarty, &map1, &snake);
-    sWindow.refresh();
+        int startx = (COLS - (map.sz * 2) - 16) / 2;
+        int starty = (LINES - map.sz + 2) / 2;
 
-    while(map1.isContinue) {
-        usleep(500 * 1000);
-        char v = getch();
-        snake.move(v);
-        snake.draw(&map1);
+        MainWindow mainWindow(&map, startx, starty);
+        snake.draw(&map);
         mainWindow.printMap();
+        
+        ScoreboardWindow sWindow(startx + (map.sz * 2) + 4, starty, &map, &snake);
         sWindow.refresh();
+        
+        MissionWindow mWindow(startx + (map.sz * 2) + 4, starty + 12, &map, &snake, missionData);
+        mWindow.refresh();
+
+        while(map.isContinue && !mWindow.isComplete()) {
+            usleep(500 * 1000);
+            char v = getch();
+            snake.move(v);
+            snake.draw(&map);
+            mainWindow.printMap();
+            sWindow.refresh();
+            mWindow.refresh();
+        }
+        if(!mWindow.isComplete()) {
+            isGameover = true;
+            break;
+        }
+
+        Window window(5, 20, (COLS - 20) / 2, (LINES - 5) / 2);
+        window.printw(2, 3, "Map Complete!");
+        window.refresh();
+        usleep(3000 * 1000);
+        window.~Window();
+    }
+
+    while(isGameover) {
+        Window window(5, 20, (COLS - 20) / 2, (LINES - 5) / 2);
+        window.printw(1, 5, "Game Over!");
+        window.printw(3, 4, "End to Ctrl+C");
+        window.refresh();
+
+        usleep(500 * 1000);
     }
 
     while(true) {
-        mainWindow.printw(11, 15, "Game Over!");
-        mainWindow.refresh();
-
-        char v = getch();
-        if((v >= 'a') && (v <= 'z')) break;
-        usleep(500 * 5000);
+        Window window(5, 20, (COLS - 20) / 2, (LINES - 5) / 2);
+        window.printw(1, 3, "Game Complete!");
+        window.printw(3, 4, "End to Ctrl+C");
+        window.refresh();
+        usleep(500 * 1000);
+        window.~Window();
     }
 
-    mainWindow.~MainWindow();
-    sWindow.~ScoreboardWindow();
     refresh();
     endwin();
-    getch();
 
     return 0;
 }
