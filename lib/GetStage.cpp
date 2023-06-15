@@ -115,24 +115,24 @@ lib::StageData stageData[N] = {
         })
     },
     { field[1], 21, snakeBodies[1], std::vector<lib::MissionData>({
+            { "B", 8, [](Map *map, Snake *snake) { return snake->getLength() >= 8; } },
+            { "+", 8, [](Map *map, Snake *snake) { return false; } },
+            { "-", 4, [](Map *map, Snake *snake) { return false; } },
+            { "G", 3, [](Map *map, Snake *snake) { return false; } }
+        })
+    },
+    { field[2], 21, snakeBodies[2], std::vector<lib::MissionData>({
             { "B", 12, [](Map *map, Snake *snake) { return snake->getLength() >= 12; } },
             { "+", 8, [](Map *map, Snake *snake) { return false; } },
             { "-", 3, [](Map *map, Snake *snake) { return false; } },
             { "G", 3, [](Map *map, Snake *snake) { return false; } }
         })
     },
-    { field[2], 21, snakeBodies[2], std::vector<lib::MissionData>({
-            { "B", 7, [](Map *map, Snake *snake) { return snake->getLength() >= 7; } },
+    { field[3], 21, snakeBodies[3], std::vector<lib::MissionData>({
+            { "B", 12, [](Map *map, Snake *snake) { return snake->getLength() >= 12; } },
             { "+", 5, [](Map *map, Snake *snake) { return false; } },
             { "-", 1, [](Map *map, Snake *snake) { return false; } },
             { "G", 7, [](Map *map, Snake *snake) { return false; } }
-        })
-    },
-    { field[3], 21, snakeBodies[3], std::vector<lib::MissionData>({
-            { "B", 10, [](Map *map, Snake *snake) { return snake->getLength() >= 10; } },
-            { "+", 5, [](Map *map, Snake *snake) { return false; } },
-            { "-", 2, [](Map *map, Snake *snake) { return false; } },
-            { "G", 1, [](Map *map, Snake *snake) { return false; } }
         })
     }
 };
