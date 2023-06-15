@@ -8,6 +8,7 @@
 using namespace lib;
 
 const std::pair<int, int> clockwise[4] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0} };
+const int clockwise_2[3] = {1, 3, 2}; // (1) clockwise (2) reverse-clockwise (3) reverse direction
 
 Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), SnakeBody(n - 1) {
     SnakeHead = std::pair<int, int>(bodies[0], bodies[1]);
@@ -20,6 +21,10 @@ Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), Sn
 void Snake::draw(Map *map) {
     auto next = map->nextMove(SnakeHead.first, SnakeHead.second, dx, dy);
     if(map->map[next.first][next.second] == lib::ElementType::Wall) {
+        map->isContinue = false;
+        return;
+    }
+    if(map->map[next.first][next.second] == lib::ElementType::ImmuneWall) {
         map->isContinue = false;
         return;
     }
@@ -63,7 +68,7 @@ void Snake::draw(Map *map) {
         if(!dx) {
             i = (dy > 0 ? 2 : 0);
         } else {
-            i = (dx > 0 ? 3 : 1);
+            i = (dx > 0 ? 1 : 3); // Error fixed { i = (dx >0 ? 3 : 1) }
         }
 
         std::pair<int, int>nextPred;
@@ -77,6 +82,7 @@ void Snake::draw(Map *map) {
             gate = *gate1;
         }
         // Choose Direction (ClockWise)
+        int dir_count = 0;
         while(flag) {
             nextPred = map->nextMove(gate.first, gate.second, clockwise[i].first, clockwise[i].second);
             if(map->map[nextPred.first][nextPred.second] == 0 ||
@@ -88,7 +94,8 @@ void Snake::draw(Map *map) {
                 dy = clockwise[i].second;
                 next = nextPred;
             } else {
-                i = (i + 1) % 4;
+                i = (i + clockwise_2[dir_count]) % 4;
+                dir_count++;
             }
         }
     }

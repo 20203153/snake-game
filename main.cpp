@@ -41,40 +41,42 @@ int main() {
         Map map;
         Snake snake;
         vector<MissionData> missionData;
-        getStage(1, map, snake, missionData);
+        for(int stage_count = 1; stage_count < 5; stage_count++){
+            getStage(stage_count, map, snake, missionData);
 
-        int startx = (COLS - (map.sz * 2) - 16) / 2;
-        int starty = (LINES - map.sz + 2) / 2;
+            int startx = (COLS - (map.sz * 2) - 16) / 2;
+            int starty = (LINES - map.sz + 2) / 2;
 
-        MainWindow mainWindow(&map, startx, starty);
-        snake.draw(&map);
-        mainWindow.printMap();
-        
-        ScoreboardWindow sWindow(startx + (map.sz * 2) + 4, starty, &map, &snake);
-        sWindow.refresh();
-        
-        MissionWindow mWindow(startx + (map.sz * 2) + 4, starty + 12, &map, &snake, missionData);
-        mWindow.refresh();
-
-        while(map.isContinue && !mWindow.isComplete()) {
-            usleep(500 * 1000);
-            char v = getch();
-            snake.move(v);
+            MainWindow mainWindow(&map, startx, starty);
             snake.draw(&map);
             mainWindow.printMap();
+            
+            ScoreboardWindow sWindow(startx + (map.sz * 2) + 4, starty, &map, &snake);
             sWindow.refresh();
+            
+            MissionWindow mWindow(startx + (map.sz * 2) + 4, starty + 12, &map, &snake, missionData);
             mWindow.refresh();
-        }
-        if(!mWindow.isComplete()) {
-            isGameover = true;
-            break;
-        }
 
-        Window window(5, 20, (COLS - 20) / 2, (LINES - 5) / 2);
-        window.printw(2, 3, "Map Complete!");
-        window.refresh();
-        usleep(3000 * 1000);
-        window.~Window();
+            while(map.isContinue && !mWindow.isComplete()) {
+                usleep(500 * 1000);
+                char v = getch();
+                snake.move(v);
+                snake.draw(&map);
+                mainWindow.printMap();
+                sWindow.refresh();
+                mWindow.refresh();
+            }
+            if(!mWindow.isComplete()) {
+                isGameover = true;
+                break;
+            }
+
+            Window window(5, 20, (COLS - 20) / 2, (LINES - 5) / 2);
+            window.printw(2, 3, "Map Complete!");
+            window.refresh();
+            usleep(3000 * 1000);
+            window.~Window();
+        }
     }
 
     while(isGameover) {
