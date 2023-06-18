@@ -10,7 +10,7 @@ using namespace lib;
 const std::pair<int, int> clockwise[4] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0} };
 const int clockwise_2[3] = {1, 3, 2}; // (1) clockwise (2) reverse-clockwise (3) reverse direction
 
-Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), SnakeBody(n - 1) {
+Snake::Snake(int bodies[], int n, int dx, int dy): length(n), dx(dx), dy(dy), SnakeBody(n - 1), growthItemCount(0), poisonItemCount(0), gateCount(0) {
     SnakeHead = std::pair<int, int>(bodies[0], bodies[1]);
     for(int i = 1; i < n; i++) {
         SnakeBody[i - 1] = {bodies[2 * i], bodies[2 * i + 1]};
@@ -58,6 +58,7 @@ void Snake::draw(Map *map) {
     // gate pass
     if(map->map[next.first][next.second] == lib::ElementType::Gate) {
         map->gateFlag = true; // gate passing start
+        gateCount++;
         auto gate1 = map->gateLoc.begin();
         auto gate2 = map->gateLoc.begin();
         gate2++;
@@ -191,10 +192,12 @@ void Snake::draw(Map *map) {
 
 int Snake::grow() {
     length++;
+    growthItemCount++;
     return length;
 }
 int Snake::smaller() {
     length--;
+    poisonItemCount++;
     return length;
 }
 

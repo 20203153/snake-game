@@ -109,30 +109,30 @@ int snakeBodies[N][6] = {
 lib::StageData stageData[N] = {
     { field[0], 21, snakeBodies[0], std::vector<lib::MissionData>({
             { "B", 7, [](Map *map, Snake *snake) { return snake->getLength() >= 7; } },
-            { "+", 5, [](Map *map, Snake *snake) { return false; } },
-            { "-", 1, [](Map *map, Snake *snake) { return false; } },
-            { "G", 3, [](Map *map, Snake *snake) { return false; } }
+            { "+", 5, [](Map *map, Snake *snake) { return snake->getGrowthItemCount() >= 5; } },
+            { "-", 1, [](Map *map, Snake *snake) { return snake->getPoisonItemCount() >= 1; } },
+            { "G", 3, [](Map *map, Snake *snake) { return snake->getGateCount() >= 3; } }
         })
     },
     { field[1], 21, snakeBodies[1], std::vector<lib::MissionData>({
             { "B", 8, [](Map *map, Snake *snake) { return snake->getLength() >= 8; } },
-            { "+", 8, [](Map *map, Snake *snake) { return false; } },
-            { "-", 4, [](Map *map, Snake *snake) { return false; } },
-            { "G", 3, [](Map *map, Snake *snake) { return false; } }
+            { "+", 8, [](Map *map, Snake *snake) { return snake->getGrowthItemCount() >= 8; } },
+            { "-", 4, [](Map *map, Snake *snake) { return snake->getPoisonItemCount() >= 4; } },
+            { "G", 3, [](Map *map, Snake *snake) { return snake->getGateCount() >= 3; } }
         })
     },
     { field[2], 21, snakeBodies[2], std::vector<lib::MissionData>({
             { "B", 12, [](Map *map, Snake *snake) { return snake->getLength() >= 12; } },
-            { "+", 8, [](Map *map, Snake *snake) { return false; } },
-            { "-", 3, [](Map *map, Snake *snake) { return false; } },
-            { "G", 3, [](Map *map, Snake *snake) { return false; } }
+            { "+", 8, [](Map *map, Snake *snake) { return snake->getGrowthItemCount() >= 8; } },
+            { "-", 3, [](Map *map, Snake *snake) { return snake->getPoisonItemCount() >= 3; } },
+            { "G", 3, [](Map *map, Snake *snake) { return snake->getGateCount() >= 3; } }
         })
     },
     { field[3], 21, snakeBodies[3], std::vector<lib::MissionData>({
             { "B", 12, [](Map *map, Snake *snake) { return snake->getLength() >= 12; } },
-            { "+", 5, [](Map *map, Snake *snake) { return false; } },
-            { "-", 1, [](Map *map, Snake *snake) { return false; } },
-            { "G", 7, [](Map *map, Snake *snake) { return false; } }
+            { "+", 5, [](Map *map, Snake *snake) { return snake->getGrowthItemCount() >= 5; } },
+            { "-", 1, [](Map *map, Snake *snake) { return snake->getPoisonItemCount() >= 1; } },
+            { "G", 7, [](Map *map, Snake *snake) { return snake->getGateCount() >= 7; } }
         })
     }
 };
