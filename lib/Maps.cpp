@@ -33,9 +33,9 @@ Map::Map(const Map &v): sz(v.sz), isContinue(v.isContinue), ticks(v.ticks),
     }
 }
 
-/* Map::~Map() {
+void Map::destroy() {
     for(int i = 0; i < sz; i++) {
         delete[] map[i];
     }
     delete[] map;
-} */
+}

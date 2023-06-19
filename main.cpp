@@ -76,6 +76,7 @@ int main() {
             window.refresh();
             usleep(3000 * 1000);
             window.~Window();
+            map.destroy();
         }
     }
 

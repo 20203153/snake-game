@@ -35,7 +35,7 @@ namespace lib {
             return std::pair<int, int>((x + dx + sz) % sz, (y + dy + sz) % sz);
         }
 
-        // ~Map();
+        void destroy();
     };
 }
 

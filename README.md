@@ -61,11 +61,12 @@ enum DirectionKey {
 ![milestone4.png](images/milestone4.png)
 
 ### 5.
-- [ ] 우측에 게임 점수 표시.
-- [ ] Mission 달성 시 다음 Map으로 진행.
-- [ ] Stage 는 최소 4단계, Map은 서로 다르게 구성.
+- [x] 우측에 게임 점수 표시.
+- [x] Mission 달성 시 다음 Map으로 진행.
+- [x] Stage 는 최소 4단계, Map은 서로 다르게 구성.
 
 - 비고: 게임 점수는 게임 규칙 #6 준수.
+![milestone5.png](images/milestone5.png)
 
 ## 비고
 ### ncurses
