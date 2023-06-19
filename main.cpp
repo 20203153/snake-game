@@ -41,7 +41,7 @@ int main() {
         Map map;
         Snake snake;
         vector<MissionData> missionData;
-        for(int stage_count = 1; stage_count < 5; stage_count++){
+        for(int stage_count = 1; stage_count < 5; stage_count++) {
             getStage(stage_count, map, snake, missionData);
 
             int startx = (COLS - (map.sz * 2) - 16) / 2;

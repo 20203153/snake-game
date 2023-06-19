@@ -34,7 +34,7 @@ void Snake::draw(Map *map) {
     }
 
     bool growFlag = false;
-    if(map->map[next.first][next.second] == lib::ElementType::GrowthItem) {
+    if(map->map[next.first][next.second] == lib::ElementType::GrowthItem && length < 10) {
         growFlag = true;
         grow();
         map->itemLoc.remove(next);

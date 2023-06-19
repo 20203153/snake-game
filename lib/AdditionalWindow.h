@@ -11,8 +11,8 @@ namespace lib {
         Snake *snake;
 
     public:
-        ScoreboardWindow(int startx, int starty, Map *map, Snake *snake): Window(10, 16, startx, starty), map(map), snake(snake) {}
-        ScoreboardWindow(int startx = 0, int starty = 0): Window(10, 16, startx, starty) {
+        ScoreboardWindow(int startx, int starty, Map *map, Snake *snake): Window(11, 16, startx, starty), map(map), snake(snake) {}
+        ScoreboardWindow(int startx = 0, int starty = 0): Window(11, 16, startx, starty) {
             wresize(window, width, height);
             wmove(window, starty, startx);
         }
@@ -37,8 +37,8 @@ namespace lib {
 
     public:
         MissionWindow(int startx, int starty, Map *map, Snake *snake, std::vector<MissionData> missions):
-            Window(10, 16, startx, starty), map(map), snake(snake), missions(missions) {}
-        MissionWindow(int startx = 0, int starty = 0): Window(10, 16, startx, starty) {
+            Window(11, 16, startx, starty), map(map), snake(snake), missions(missions) {}
+        MissionWindow(int startx = 0, int starty = 0): Window(11, 16, startx, starty) {
             wresize(window, width, height);
             wmove(window, starty, startx);
         }
